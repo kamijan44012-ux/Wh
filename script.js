@@ -1,17 +1,13 @@
+
 /* ============================================================
    MY_SHOP — script.js
    ============================================================ */
 
 /* ------------------------------------------------------------
-   ⚙️ SETTINGS — CHANGE THESE TWO VALUES
-   ------------------------------------------------------------
-   WHATSAPP_NUMBER:
-   - International format, NO "+" sign, NO spaces, NO dashes.
-   - Pakistan example: 0300-1234567  →  "923001234567"
-   - UAE example:      050-1234567   →  "971501234567"
+   ⚙️ SETTINGS — YOUR UPDATED VALUES
    ------------------------------------------------------------ */
-const WHATSAPP_NUMBER = "+447572001813"; // ← اپنا واٹس ایپ نمبر یہاں لکھیں
-const ADMIN_PASSWORD = "12123434";      // ← ایڈمن پاس ورڈ یہاں تبدیل کریں
+const WHATSAPP_NUMBER = "447572001813"; // ← آپ کا واٹس ایپ نمبر (بغیر پلس کے درست کر دیا گیا ہے)
+const ADMIN_PASSWORD = "12123434";      // ← آپ کا نیا ایڈمن پاس ورڈ
 
 /* ------------------------------------------------------------
    DEFAULT PRODUCTS (exactly 10)
@@ -102,11 +98,9 @@ function loadProducts() {
     try {
       return JSON.parse(saved);
     } catch (e) {
-      // Corrupted data → reset to defaults
       return [...DEFAULT_PRODUCTS];
     }
   }
-  // First visit → seed with default products
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRODUCTS));
   return [...DEFAULT_PRODUCTS];
 }
@@ -119,18 +113,23 @@ let products = loadProducts();
 let isAdminLoggedIn = false;
 
 /* ------------------------------------------------------------
-   WHATSAPP ORDER
-   Opens WhatsApp (app on mobile, WhatsApp Web on desktop)
-   with a pre-formatted Urdu order message.
+   WHATSAPP ORDER WITH AUTOMATIC PRODUCT LINK
    ------------------------------------------------------------ */
 function buyOnWhatsApp(productId) {
   const product = products.find(p => p.id === productId);
   if (!product) return;
 
+  // اگر تصویر گٹ ہب فولڈر کے اندر ہے، تو یہ اس کا پورا لنک بنائے گا، ورنہ آن لائن لنک استعمال کرے گا
+  let productImageUrl = product.image;
+  if (!product.image.startsWith('http://') && !product.image.startsWith('https://')) {
+    productImageUrl = window.location.origin + "/" + product.image;
+  }
+
   const message =
     "سلام، میں آپ کی ویب سائٹ سے یہ آئٹم آرڈر کرنا چاہتا ہوں:\n\n" +
     "*پروڈکٹ:* " + product.title + "\n" +
-    "*قیمت:* " + product.price;
+    "*قیمت:* " + product.price + "\n" +
+    "*تصویر کا لنک:* " + productImageUrl;
 
   const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
   window.open(url, "_blank");
@@ -273,8 +272,8 @@ function renderAdminList() {
 function deleteProduct(productId) {
   products = products.filter(p => p.id !== productId);
   saveProducts();
-  renderProducts();   // homepage updates instantly
-  renderAdminList();  // dashboard list updates instantly
+  renderProducts();   
+  renderAdminList();  
 }
 
 document.getElementById("addProductBtn").addEventListener("click", () => {
@@ -289,7 +288,6 @@ document.getElementById("addProductBtn").addEventListener("click", () => {
   }
   addError.classList.add("hidden");
 
-  // Generate a unique id (1 higher than the current maximum)
   const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
 
   products.push({ id: newId, title, price, description, image });
@@ -297,7 +295,6 @@ document.getElementById("addProductBtn").addEventListener("click", () => {
   renderProducts();
   renderAdminList();
 
-  // Clear the form
   document.getElementById("newTitle").value = "";
   document.getElementById("newPrice").value = "";
   document.getElementById("newImage").value = "";

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY_SHOP — WhatsApp Store</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts: Sora (English UI) + Noto Nastaliq Urdu (Urdu text) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-stone-50 text-stone-900 antialiased">
+
+  <!-- ============================================================
+       HEADER + LOGO
+       ✏️ HOW TO CHANGE THE LOGO TEXT:
+       Just edit the text inside <span class="logo-badge"> below.
+       e.g. change MY_SHOP to ZEE_STORE — that's it.
+       (Logo colors/border are styled in style.css under "LOGO BADGE")
+       ============================================================ -->
+  <header class="sticky top-0 z-40 bg-stone-50/90 backdrop-blur border-b border-stone-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+
+      <!-- LOGO -->
+      <a href="#" class="logo-badge">MY_SHOP</a>
+
+      <!-- Admin Login button (opens the hidden admin modal) -->
+      <button id="adminLoginBtn"
+        class="text-sm font-semibold text-stone-500 hover:text-emerald-700 border border-stone-300 hover:border-emerald-600 rounded-full px-4 py-1.5 transition-colors">
+        Admin Login
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HERO (small + minimal)
+       ============================================================ -->
+  <section class="max-w-6xl mx-auto px-4 pt-10 pb-6 text-center">
+    <h1 class="font-display text-3xl sm:text-4xl font-bold tracking-tight">
+      Order on <span class="text-emerald-600">WhatsApp</span>
+    </h1>
+    <p class="urdu-text text-stone-600 mt-4 text-lg leading-loose">
+      اپنی پسند کی پروڈکٹ منتخب کریں اور ایک کلک میں واٹس ایپ پر آرڈر کریں
+    </p>
+  </section>
+
+  <!-- ============================================================
+       PRODUCTS GRID (rendered by script.js)
+       ============================================================ -->
+  <main class="max-w-6xl mx-auto px-4 pb-16">
+    <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+    <!-- Shown if every product gets deleted -->
+    <p id="emptyMessage" class="hidden text-center text-stone-400 py-16 urdu-text text-lg">
+      ابھی کوئی پروڈکٹ موجود نہیں ہے
+    </p>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="border-t border-stone-200 py-6 text-center text-sm text-stone-400">
+    © 2026 MY_SHOP — Powered by WhatsApp Orders
+  </footer>
+
+  <!-- ============================================================
+       ADMIN LOGIN MODAL (hidden by default)
+       ============================================================ -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+      <h2 class="font-display text-xl font-bold mb-1">Admin Login</h2>
+      <p class="text-sm text-stone-500 mb-4">Enter your admin password to manage products.</p>
+
+      <input id="adminPasswordInput" type="password" placeholder="Password"
+        class="w-full border border-stone-300 rounded-lg px-3 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+      <p id="loginError" class="hidden text-sm text-red-600 mb-2">Wrong password. Try again.</p>
+
+      <div class="flex gap-2 mt-2">
+        <button id="loginSubmitBtn"
+          class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg py-2 transition-colors">
+          Login
+        </button>
+        <button id="loginCancelBtn"
+          class="flex-1 border border-stone-300 hover:bg-stone-100 rounded-lg py-2 font-semibold transition-colors">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ADMIN DASHBOARD MODAL (visible only after login)
+       ============================================================ -->
+  <div id="adminDashboard" class="hidden fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 my-8">
+
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="font-display text-xl font-bold">Admin Dashboard</h2>
+        <button id="adminLogoutBtn"
+          class="text-sm font-semibold text-stone-500 hover:text-red-600 border border-stone-300 rounded-full px-4 py-1.5 transition-colors">
+          Logout
+        </button>
+      </div>
+
+      <!-- ADD NEW PRODUCT FORM -->
+      <div class="border border-stone-200 rounded-xl p-4 mb-6 bg-stone-50">
+        <h3 class="font-semibold mb-3 text-emerald-700">+ Add New Product</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input id="newTitle" type="text" placeholder="Product Title (e.g. Wireless Mouse)"
+            class="border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <input id="newPrice" type="text" placeholder="Price (e.g. 1500 روپے)"
+            class="border border-stone-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <input id="newImage" type="text" placeholder="Image URL (https://...)"
+            class="border border-stone-300 rounded-lg px-3 py-2 sm:col-span-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <textarea id="newDescription" rows="2" placeholder="(اردو تفصیل) Description"
+            class="border border-stone-300 rounded-lg px-3 py-2 sm:col-span-2 urdu-text focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+        </div>
+        <p id="addError" class="hidden text-sm text-red-600 mt-2">Please fill all four fields.</p>
+        <button id="addProductBtn"
+          class="mt-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg px-5 py-2 transition-colors">
+          Add Product
+        </button>
+      </div>
+
+      <!-- EXISTING PRODUCTS LIST (with delete buttons) -->
+      <h3 class="font-semibold mb-3">Existing Products</h3>
+      <div id="adminProductsList" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- Main logic -->
+  <script src="script.js"></script>
+</body>
+</html>

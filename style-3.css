@@ -1,0 +1,102 @@
+/* ============================================================
+   MY_SHOP — Custom Styles
+   (Tailwind handles the layout; this file handles the brand.)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   FONTS
+   - "Sora" is used for headings/buttons (English UI)
+   - "Noto Nastaliq Urdu" is used for all Urdu text
+   ------------------------------------------------------------ */
+.font-display {
+  font-family: 'Sora', sans-serif;
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+}
+
+/* Apply this class to any element containing Urdu text */
+.urdu-text {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  direction: rtl;
+  line-height: 2.1; /* Nastaliq needs extra line height to breathe */
+}
+
+/* ============================================================
+   LOGO BADGE
+   ✏️ HOW TO CUSTOMIZE THE LOGO:
+   1. Logo TEXT      → edit it inside index.html (<a class="logo-badge">MY_SHOP</a>)
+   2. Background tint → change `background` below (currently soft emerald)
+   3. Border color    → change `border` color below
+   4. Text color      → change `color` below
+   5. Make it rounder → increase `border-radius` (e.g. 999px = pill shape)
+   ============================================================ */
+.logo-badge {
+  display: inline-block;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;          /* spaced-out, elegant feel */
+  color: #047857;                  /* emerald-700 text */
+  background: #ecfdf5;             /* emerald-50 tint */
+  border: 1.5px solid #10b981;     /* emerald-500 border */
+  border-radius: 10px;
+  padding: 6px 16px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.logo-badge:hover {
+  background: #d1fae5;             /* slightly deeper tint on hover */
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   PRODUCT CARDS — subtle lift on hover
+   ============================================================ */
+.product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -12px rgba(4, 120, 87, 0.25); /* soft emerald shadow */
+}
+
+/* Product images: fixed height, cropped neatly */
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ============================================================
+   WHATSAPP BUTTON — official WhatsApp green
+   ✏️ Change `background` here if you want a different button color
+   ============================================================ */
+.whatsapp-btn {
+  background: #25d366;
+  transition: background 0.2s ease;
+}
+
+.whatsapp-btn:hover {
+  background: #1ebe5b;
+}
+
+/* ============================================================
+   ACCESSIBILITY — visible keyboard focus + reduced motion
+   ============================================================ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
